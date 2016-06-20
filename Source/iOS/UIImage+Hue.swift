@@ -12,7 +12,7 @@ class CountedColor {
 
 extension UIImage {
 
-  private func resize(newSize: CGSize) -> UIImage {
+  private func resize(newSize: CGSize) -> UIImage? {
     UIGraphicsBeginImageContextWithOptions(newSize, false, 2)
     drawInRect(CGRectMake(0, 0, newSize.width, newSize.height))
     let result = UIGraphicsGetImageFromCurrentImageContext()
@@ -25,11 +25,11 @@ extension UIImage {
     let cgImage: CGImageRef
 
     if let scaleDownSize = scaleDownSize {
-      cgImage = resize(scaleDownSize).CGImage!
+      cgImage = resize(scaleDownSize)!.CGImage!
     } else {
       let ratio = size.width / size.height
       let r_width: CGFloat = 250
-      cgImage = resize(CGSize(width: r_width, height: r_width / ratio)).CGImage!
+      cgImage = resize(CGSize(width: r_width, height: r_width / ratio))!.CGImage!
     }
 
     let width = CGImageGetWidth(cgImage)
@@ -43,7 +43,7 @@ extension UIImage {
     let colorSpace = CGColorSpaceCreateDeviceRGB()
     let raw = malloc(bytesPerRow * height)
     let bitmapInfo = CGImageAlphaInfo.PremultipliedFirst.rawValue
-    let context = CGBitmapContextCreate(raw, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo)
+    let context = CGBitmapContextCreate(raw, width, height, bitsPerComponent, bytesPerRow, colorSpace, bitmapInfo)!
     CGContextDrawImage(context, CGRectMake(0, 0, CGFloat(width), CGFloat(height)), cgImage)
     let data = UnsafePointer<UInt8>(CGBitmapContextGetData(context))
     let imageBackgroundColors = NSCountedSet(capacity: height)
